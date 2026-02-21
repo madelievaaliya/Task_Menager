@@ -41,11 +41,11 @@ class TaskManager:
         del self.tasks[index]
         
     def task_search(self, text):
-        empty = []
-        for item in self.tasks:
-            if text.lower() in item.text.lower():
-                empty.append(item.text)
-        return empty        
+        return  [task for task in self.tasks if text.lower() in task.text.lower()]
+        # for item in self.tasks:
+        #     if text.lower() in item.text.lower():
+        #         empty.append(item.text)
+            
 
     def get_statistic(self):
         total = len(self.tasks)
@@ -75,11 +75,7 @@ class TaskManager:
         #             break
         #     else:
         #         sorted_list.append(task)   
-        return sorted_list             
-                    
-                     
-
-        
+        return sorted_list   
         
 
     def save_to_file(self):
@@ -207,7 +203,9 @@ while True:
         
     elif choice == "7":    
         new_text = input('Введите ключевое слово: ')
-        print(taskmanager.task_search(new_text))
+        tasks = taskmanager.task_search(new_text)
+        for task in tasks:
+            print(task.text)
         
     elif choice == '9':
         total, count_done, count_not_done = taskmanager.get_statistic()
