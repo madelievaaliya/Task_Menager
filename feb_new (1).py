@@ -163,9 +163,7 @@ while True:
         if priority_choice == "2":
             priority = "Medium" 
         if priority_choice == "3":
-            priority = "low" 
-        else:
-            priority = "Medium"          
+            priority = "low"         
             
         taskmanager.add_task(new_add_task, priority)
         taskmanager.save_to_file()
