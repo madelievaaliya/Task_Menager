@@ -2,9 +2,10 @@ import json
 from datetime import datetime
 
 class Task:
-    def __init__(self, text):
+    def __init__(self, text, priority="Medium"):
         self.text = text
         self.done = False
+        self.priority = priority
         self.created_at = datetime.now().strftime("%d.%m.%Y %H:%M")
         
     def complete(self):
@@ -14,6 +15,7 @@ class Task:
         return {
             "text": self.text,
             "done": self.done,
+            "priority": self.priority,
             "created_at": self.created_at
         }  
 
@@ -22,8 +24,8 @@ class TaskManager:
     def __init__(self):
         self.tasks = []  
         
-    def add_task(self, text):
-        task = Task(text)
+    def add_task(self, text, priority):
+        task = Task(text, priority)
         self.tasks.append(task)
         
     def get_tasks(self):
@@ -95,6 +97,7 @@ class TaskManager:
                 data = json.load(file)
                 for item in data:
                     task = Task(item['text'])
+                    task.priority = item.get("priority", "Medium")
                     task.done = item['done']
                     # if 'created_at' in item:
                     #     task.created_at = item['created_at']
@@ -119,7 +122,7 @@ def show_tasks(st = True):
     for i,task in enumerate(taskmanager.get_tasks()):
         if not task.done or st:
             status = '+' if task.done else '-' 
-            print(f'{i}: {task.text} : {task.created_at} : ({status})')
+            print(f'{i}: {task.text} | Priority: {task.priority} | {task.created_at} | ({status})')
 
 while True:
     print('1 - Показать задачи')  
@@ -128,13 +131,12 @@ while True:
     print('4 - Удалить задачу')
     print('5 - Редактировать задачу')
     print('6 - Показать только НЕВЫПОЛНЕННЫЕ задачи')  
-    print('7 - Поиск задачу по ключевому слову')   
+    print('7 - Поиск 1')   
     print('8 - Сохранить задачи')
     print('9 - Показать статистику') 
     print('10 - Показать список задач по статусу') 
     print('11 - Показать отсортированный список по дате')
     print('12 - Показать отсортированный список по дате')
-    
     print('0 - Выйти') 
     
     choice = input('Выбор: ')
@@ -148,7 +150,22 @@ while True:
                 
     elif choice == '2':
         new_add_task = input('Введите новую задачу: ')
-        taskmanager.add_task(new_add_task)
+        
+        print("Выберите приоритет:")
+        print("1 - High")
+        print("2 - Medium")
+        print("3 - Low")
+        
+        priority_choice = input("Ваш выбор: ")
+        
+        if priority_choice == "1":
+            priority = "High"
+        if priority_choice == "2":
+            priority = "Medium" 
+        if priority_choice == "3":
+            priority = "low"         
+            
+        taskmanager.add_task(new_add_task, priority)
         taskmanager.save_to_file()
         print('Новая задача добавлена!')
                     
