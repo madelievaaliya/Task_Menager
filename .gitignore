@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 data/
 data/*.json
+.DS_Store
+backup/
+tasks.json
